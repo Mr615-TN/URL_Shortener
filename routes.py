@@ -1,4 +1,4 @@
-from flask import Blueprint, request,jsonify,redirect
+from flask import Blueprint, request,jsonify,redirect, current_app
 from models import URL
 from app import db 
 
@@ -23,10 +23,13 @@ def shorten_url():
 
 @main.route('/<short_url>')
 def redirect_to_url(short_url):
-    url = URL.query.filter_by(short_url=short_url) 
-    if url:
-        return redirect(url.original_url)
+    current_app.logger.info(f"Attempting to redirect to short URL: {short_url}")
+    url_object = URL.query.filter_by(short_url=short_url) 
+    if url_object:
+        current_app.logger.info(f"Redirecting to original URL: {url_object.original_url}")
+        return redirect(url_object.original_url)
     else:
+        current_app.logger.info(f"URL not found: {short_url}")
         return jsonify({'error':'URL not found'}), 404
 
 @main.route('/')
