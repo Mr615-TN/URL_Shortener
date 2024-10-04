@@ -4,7 +4,7 @@ from app import db
 
 main = Blueprint('main', __name__)
 
-@main.route('shorten', methods=[POST])
+@main.route('/shorten', methods=['POST'])
 def shorten_url():
     original_url = request.json['url']
     existing_url = URL.query.filter_by(original_url=original_url).first()
@@ -28,4 +28,8 @@ def redirect_to_url(short_url):
         return redirect(url.original_url)
     else:
         return jsonify({'error':'URL not found'}), 404
+
+@main.route('/')
+def home():
+    return "Welcome to URL Shortener"
     
