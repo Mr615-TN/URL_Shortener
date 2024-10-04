@@ -9,7 +9,9 @@ def create_app():
 
     db.init_app(app)
 
+    #TODO figure out why logging isn't working
     app.logger.setLevel(logging.INFO)
+
     from routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 

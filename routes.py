@@ -4,6 +4,7 @@ from app import db
 
 main = Blueprint('main', __name__)
 
+#TODO fix this route
 @main.route('/shorten', methods=['POST'])
 def shorten_url():
     original_url = request.json['url']
@@ -21,6 +22,8 @@ def shorten_url():
 
     return jsonify({'short_url':request.host_url + short_url})
 
+
+#TODO fix this route
 @main.route('/<short_url>')
 def redirect_to_url(short_url):
     current_app.logger.info(f"Attempting to redirect to short URL: {short_url}")
