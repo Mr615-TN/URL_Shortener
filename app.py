@@ -1,21 +1,21 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy 
+from extensions import db
 from config import Config
 import logging
-
-db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    # Initialize extensions
     db.init_app(app)
 
-    # Configure logging properly
+    # Configure logging
     if not app.debug:
         logging.basicConfig(level=logging.INFO)
     app.logger.setLevel(logging.INFO)
 
+    # Register blueprints
     from routes import main as main_blueprint
     app.register_blueprint(main_blueprint)
 

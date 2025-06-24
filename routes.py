@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, redirect, current_app
-from models import URL, db
+from models import URL
+from extensions import db
 
 main = Blueprint('main', __name__)
 
@@ -47,14 +48,14 @@ def shorten_url():
     except Exception as e:
         current_app.logger.error(f"Error in shorten_url: {str(e)}")
         db.session.rollback()
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({'error': f'Internal server error: {str(e)}'}), 500
 
 @main.route('/<short_url>')
 def redirect_to_url(short_url):
     try:
         current_app.logger.info(f"Attempting to redirect to short URL: {short_url}")
         
-        # Fixed: Added .first() to actually execute the query
+        # Execute the query properly
         url_object = URL.query.filter_by(short_url=short_url).first()
         
         if url_object:
@@ -66,7 +67,7 @@ def redirect_to_url(short_url):
             
     except Exception as e:
         current_app.logger.error(f"Error in redirect_to_url: {str(e)}")
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({'error': f'Internal server error: {str(e)}'}), 500
 
 @main.route('/')
 def home():
@@ -80,4 +81,4 @@ def home():
 
 @main.route('/health')
 def health_check():
-    return jsonify({'status': 'healthy'}), 200  
+    return jsonify({'status': 'healthy'}), 200
