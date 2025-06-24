@@ -42,7 +42,9 @@ python3 app.py
 Sending a POST Request to Shorten a URL
 Step 1: Once the Flask server is running, you can shorten a URL by sending a POST request. Use the following command:
 
-curl -X POST -H "Content-Type: application/json" -d '{"url":"https://www.example.com"}' http://127.0.0.1:5000/shorten
+curl -X POST http://localhost:5000/shorten \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://www.example.com"}'
 
 
 Note: Replace "https://www.example.com" with the URL you want to shorten.
